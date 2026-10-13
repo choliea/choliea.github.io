@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="310" viewBox="0 0 760 310" role="img" aria-label="아무튼 실행 중 부팅 화면">
+<rect width="760" height="310" rx="12" fill="#12141c"/>
+<rect x="19" y="19" width="722" height="272" rx="4" fill="#202636" stroke="#8da1ba" stroke-width="3"/>
+<rect x="19" y="19" width="722" height="30" fill="#4a6181"/>
+<g fill="#edf3ff" font-family="monospace" font-size="15"><text x="36" y="40">아무튼 실행 중 — system.exe</text><text x="701" y="40">×</text></g>
+<g font-family="monospace" text-anchor="middle"><text x="380" y="115" fill="#e9f0ff" font-size="33" font-weight="bold">아무튼 실행 중</text><text x="380" y="146" fill="#a5b9d1" font-size="15">정상 작동 여부는 확인되지 않았습니다.</text></g>
+<rect x="172" y="177" width="416" height="24" fill="#0e111a" stroke="#8296b1" stroke-width="2"/>
+<rect x="178" y="183" width="48" height="12" fill="#8ee1ae"><animate attributeName="width" values="0;80;180;310;402;402;0" keyTimes="0;0.15;0.4;0.7;0.85;0.95;1" dur="8s" repeatCount="indefinite"/></rect>
+<g font-family="monospace" font-size="15" text-anchor="middle"><text x="380" y="237" fill="#e4d79a" opacity="0">목적을 찾을 수 없습니다.<animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.72;0.76;0.94;1" dur="8s" repeatCount="indefinite"/></text><text x="380" y="260" fill="#9fd9b8" opacity="0">무시하고 계속 진행합니다.<animate attributeName="opacity" values="0;0;0;1;1;0" keyTimes="0;0.78;0.82;0.85;0.95;1" dur="8s" repeatCount="indefinite"/></text></g>
+</svg>
