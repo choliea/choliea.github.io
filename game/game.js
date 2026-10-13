@@ -1,0 +1,18 @@
+'use strict';
+const $=id=>document.getElementById(id);
+const dialog=$('dialog'),items=$('items'),progress=$('progress');
+const state={found:new Set(),hints:0,won:false,sound:false};
+const clues={clock:{name:'시계 메모',digit:'4',text:['시계는 4시에서 멈춰 있다.','뒷면에 적힌 문장: “첫 번째는 멈춘 시간.”','시계가 멈춘 이유는 모른다. 아마 퇴근했을 것이다.']},shelf:{name:'책갈피',digit:'2',text:['책장에서 책갈피가 떨어졌다.','“두 번째는 책장 맨 위의 책 두 권.”','책은 세 권인데 두 권만 세는 이유는 세 번째가 메뉴판이기 때문이다.']},plant:{name:'화분 쪽지',digit:'7',text:['화분 밑에 종이가 있다.','“마지막은 이 방에 들어온 지 일곱 번째로 떠오른 생각.”','이상하게도 종이에는 숫자 7이 친절하게 적혀 있다.']} };
+const extra={desk:['컴퓨터 화면: “아무튼 실행 중”','열려 있는 창 12개. 완료한 작업 0개.','시스템: 이 정보는 탈출에 도움이 되지 않습니다.'],drawer:['서랍을 열었다.','안에는 ‘언젠가 필요할 것’이라고 적힌 케이블 43개가 있다.','지금 필요한 건 없다.'],door:['문은 잠겨 있다.','잠금장치에는 숫자 세 자리를 입력할 수 있다.','왜 하필 세 자리인지는 시설 관리자에게 문의하라고 한다.']};
+function say(lines){dialog.replaceChildren(...lines.map(s=>{const p=document.createElement('p');p.textContent=s;return p;}));}
+function tone(freq=520){if(!state.sound)return;try{const ctx=new(window.AudioContext||window.webkitAudioContext)(),osc=ctx.createOscillator(),gain=ctx.createGain();osc.type='square';osc.frequency.value=freq;gain.gain.setValueAtTime(.035,ctx.currentTime);gain.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.09);osc.connect(gain).connect(ctx.destination);osc.start();osc.stop(ctx.currentTime+.1);osc.onended=()=>ctx.close();}catch{}}
+function inspect(spot){tone();if(clues[spot]){const c=clues[spot];if(!state.found.has(spot)){state.found.add(spot);renderItems();}say(c.text);}else say(extra[spot]);}
+function renderItems(){items.replaceChildren();for(const key of ['clock','shelf','plant']){if(state.found.has(key)){const b=document.createElement('button');b.className='item';b.type='button';b.textContent='▣ '+clues[key].name;b.title='다시 조사';b.onclick=()=>inspect(key);items.append(b);}}if(!state.found.size){const s=document.createElement('span');s.className='empty';s.textContent='아직 아무것도 없다. 이상하게 익숙하다.';items.append(s);}progress.textContent=`단서 ${state.found.size} / 3`;}
+document.querySelectorAll('[data-spot]').forEach(b=>b.addEventListener('click',()=>inspect(b.dataset.spot)));
+$('hint').addEventListener('click',()=>{tone(600);state.hints=Math.min(3,state.hints+1);$('hintCount').textContent=`(${state.hints}/3)`;const messages=[['힌트 1/3','방에는 시계, 책장, 화분이 있다. 이 셋은 유독 말이 많다.'],['힌트 2/3','시계 → 책장 → 화분 순서로 숫자를 읽어 보자.'],['힌트 3/3','암호는 427이다. 이제 이 방의 보안 수준을 걱정할 시간이다.']];say(messages[state.hints-1]);});
+$('lockForm').addEventListener('submit',e=>{e.preventDefault();const code=$('code').value.trim();if(!/^\d{3}$/.test(code)){say(['시스템: 숫자 세 자리를 입력해 주세요.','보안은 허술하지만 형식에는 엄격합니다.']);tone(190);return;}if(code==='427'){if(state.found.size<3){say(['정답은 맞습니다. 그런데 단서를 전부 찾지 않았군요.','시스템: 우연한 정답은 인정하지 않습니다.','단서 3개를 수집하고 다시 시도하세요.']);return;}state.won=true;$('ending').classList.remove('hidden');tone(850);}else{say([`입력한 암호: ${code}`,'잠금 해제 실패.','시스템: 다시 시도할 수 있습니다. 놀랍게도 무제한입니다.']);tone(180);}});
+function reset(){state.found.clear();state.hints=0;state.won=false;$('code').value='';$('hintCount').textContent='(0/3)';$('ending').classList.add('hidden');renderItems();say(['눈을 떠보니 낯선 방이다.','컴퓨터에는 내가 분명 끈 적 없는 프로그램이 실행 중이다.','문을 열려면 3자리 암호가 필요하다고 한다. 굳이?']);}
+$('reset').onclick=reset;$('again').onclick=reset;
+$('sound').onclick=()=>{state.sound=!state.sound;$('sound').textContent=state.sound?'♪ 소리 켬':'♪ 소리 끔';$('sound').setAttribute('aria-pressed',String(state.sound));tone();};
+const started=Date.now();setInterval(()=>{const sec=Math.floor((Date.now()-started)/1000);$('clock').textContent=`${String(Math.floor(sec/60)).padStart(2,'0')}:${String(sec%60).padStart(2,'0')}`;},1000);
+renderItems();
