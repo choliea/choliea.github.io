@@ -10,9 +10,7 @@
 
 <sub>개인용 시스템 · 사용자 1명 · 사용 설명서 분실</sub>
 
-**[🚪 방_01.exe 실행하기 — 픽셀 방탈출](https://YOUR_USERNAME.github.io/YOUR_USERNAME/game/)**
-
-<sub>※ GitHub Pages 배포 후 YOUR_USERNAME을 사용자명으로 변경하세요.</sub>
+**[🚪 방_01.exe 실행하기 — 픽셀 방탈출](https://choliea.github.io/choliea/game/)**
 
 </div>
 
